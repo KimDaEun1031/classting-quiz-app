@@ -69,6 +69,10 @@ const GlobalStyle = createGlobalStyle`
     border: none;
     resize: none;
   }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export default GlobalStyle;
