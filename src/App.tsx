@@ -1,11 +1,20 @@
+import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 
 import Main from "./components/Main";
+import Note from "./components/Note";
+import Quiz from './components/Quiz';
+import Result from "./components/Result";
 
 function App() {
   return (
     <Background>
-      <Main />
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/quiz" element={<Quiz />} />
+        <Route path="/result" element={<Result />} />
+        <Route path="/note" element={<Note />} />
+      </Routes>
     </Background>
   );
 }

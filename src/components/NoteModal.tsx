@@ -5,7 +5,7 @@ import Button from "./shared/Button";
 import AnimationButton from "./shared/AnimationButton";
 import BackIcon from "../assets/images/back-icon.png";
 
-function NoteModal() {
+function NoteModal({ handleModal }: any) {
   const exampleAnswerList = ["Pirates of the Caribbean", "Ted", "Spy Kids", "Harry Potter"];
 
   return (
@@ -20,7 +20,7 @@ function NoteModal() {
               <Button disabled>{item}</Button>
             ))}
           </div>
-          <AnimationButton>
+          <AnimationButton onClick={() => handleModal(false)}>
             <img src={BackIcon} alt="back button" />
             <span>뒤로가기</span>
           </AnimationButton>

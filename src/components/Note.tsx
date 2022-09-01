@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 
 import Container from "./shared/Container";
@@ -6,26 +8,33 @@ import HomeIcon from "../assets/images/home-icon.png";
 import NoteModal from './NoteModal';
 
 function Note() {
+  const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleModal = (result: boolean) => {
+    setOpenModal(result);
+  };
+
   return (
     <>
       <NoteContainer>
         <Header>
           <div className="title">
             <p>오답노트</p>
-            <Button>
+            <Button onClick={() => navigate("/")}>
               <img src={HomeIcon} alt="home button" className="home" />
             </Button>
           </div>
           <div className="line" />
         </Header>
         <Content>
-          <Button>
+          <Button onClick={() => setOpenModal(true)}>
             <span>2022-09-01</span>
             <h2>Daniel Radcliffe became a global star in the film industry due to his performance in which film franchise?</h2>
           </Button>
         </Content>
       </NoteContainer>
-      <NoteModal />
+      {openModal && <NoteModal handleModal={handleModal} />}
     </>
   );
 }

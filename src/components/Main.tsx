@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import Container from "./shared/Container";
@@ -8,17 +9,19 @@ import NoteIcon from "../assets/images/note-icon.png";
 import BackIcon from "../assets/images/back-icon.png";
 
 function Main() {
+  const navigate = useNavigate();
+
   return (
     <MainContainer>
       <img src={Logo} alt="logo" />
       <div className="startContainer">
         <img src={QuizIcon} alt="quiz icon" />
         <div>
-          <AnimationButton>
+          <AnimationButton onClick={() => navigate("/quiz")}>
             <img src={BackIcon} alt="start button" />
             <span>Start</span>
           </AnimationButton>
-          <AnimationButton>
+          <AnimationButton onClick={() => navigate("/note")}>
             <img src={NoteIcon} alt="note button" />
             <span>오답 노트</span>
           </AnimationButton>

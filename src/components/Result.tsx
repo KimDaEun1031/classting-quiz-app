@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import Container from "./shared/Container";
@@ -8,6 +9,8 @@ import RedoIcon from "../assets/images/redo-icon.png";
 import NoteIcon from "../assets/images/note-icon.png";
 
 function Result() {
+  const navigate = useNavigate();
+
   return (
     <ResultContainer>
       <ResultFrame>
@@ -18,15 +21,15 @@ function Result() {
         <Chart></Chart>
       </ResultFrame>
       <ButtonContainer>
-        <AnimationButton>
+        <AnimationButton onClick={() => navigate("/")}>
           <img src={HomeIcon} alt="home button" />
           <span>홈</span>
         </AnimationButton>
-        <AnimationButton>
+        <AnimationButton onClick={() => navigate("/quiz")}>
           <img src={RedoIcon} alt="redo button" />
           <span>다시 하기</span>
         </AnimationButton>
-        <AnimationButton>
+        <AnimationButton onClick={() => navigate("/note")}>
           <img src={NoteIcon} alt="note button" />
           <span>오답 노트</span>
         </AnimationButton>
