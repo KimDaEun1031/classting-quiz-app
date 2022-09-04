@@ -16,7 +16,6 @@ function Result() {
   const { state }: any = useLocation();
   const navigate = useNavigate();
   const { correctNumber, quizData, time } = state;
-  console.log(correctNumber, quizData, time);
 
   const data = {
     labels: ["정답", "오답"],
