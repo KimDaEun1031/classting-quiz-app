@@ -17,6 +17,7 @@ function Quiz() {
   const [selectIdx, setSelectIdx] = useState<number>();
   const [correctNumber, setCorrectNumber] = useState<number>(0);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
+  const [time, setTime] = useState<number>(0);
 
   const handleQuizData = async () => {
     const res = await getQuizAPI();
@@ -46,19 +47,34 @@ function Quiz() {
   };
 
   const handleResult = () => {
+    navigate("/result", {
+      state: {
+        quizData,
+        correctNumber,
+        time,
+      },
+    });
+
     setStage(0);
     setSelected(false);
     setSelectIdx(4);
     setIsCorrect(false);
     setCorrectNumber(0)
-
-    navigate("/result", {
-      state: quizData,
-    });
+    setTime(0)
   };
 
   useEffect(() => {
     handleQuizData();
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime((props) => props + 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    }
   }, []);
 
   return (
@@ -69,6 +85,7 @@ function Quiz() {
             <h2 className="questionNumber">
               {`Question ${stage + 1}`}
             </h2>
+            <p>{time}</p>
             <div className="correctAnswer">
               <p>✔ {correctNumber}</p>
               <p>✘ {quizData.length - correctNumber}</p>
@@ -117,8 +134,10 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 10px;
+  text-align: center;
 
   p, h2 {
+    width: 130px;
     margin: 10px;
     color: white;
     font-size: 20px;
@@ -130,6 +149,8 @@ const Header = styled.div`
   }
 
   .correctAnswer p {
+    text-align: right;
+
     &:first-child {
       color: ${(props) => props.theme.colors.green};
     }
