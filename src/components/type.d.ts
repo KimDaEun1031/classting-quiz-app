@@ -6,3 +6,8 @@ export interface item {
   question: string;
   type: string;
 }
+
+export interface answerProps {
+  selected?: boolean;
+  isCorrect?: boolean;
+}

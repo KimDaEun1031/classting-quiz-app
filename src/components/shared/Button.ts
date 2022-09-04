@@ -16,17 +16,13 @@ const Button = styled.button`
     background-color: ${(props) => props.theme.colors.green};
 
     &::before {
-      left:-50%;
+      left: -50%;
       transform: skewX(-5deg);
     }
   }
 
   &:disabled {
     cursor: text;
-
-    &:hover {
-      background-color: ${(props) => props.theme.colors.darkgray};
-    }
   }
 `;
 

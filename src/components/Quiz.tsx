@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import Button from "./shared/Button";
@@ -6,10 +7,16 @@ import Container from "./shared/Container";
 import Frame from "./shared/Frame";
 import getQuizAPI from '../api/index';
 import scrubData from "../utils/scrubData";
+import { answerProps } from './type';
 
 function Quiz() {
+  const navigate = useNavigate();
   const [stage, setStage] = useState<number>(0);
   const [quizData, setQuizData] = useState<any | null>([]);
+  const [selected, setSelected] = useState<boolean>(false);
+  const [selectIdx, setSelectIdx] = useState<number>();
+  const [correctNumber, setCorrectNumber] = useState<number>(0);
+  const [isCorrect, setIsCorrect] = useState<boolean>(false);
 
   const handleQuizData = async () => {
     const res = await getQuizAPI();
@@ -18,47 +25,90 @@ function Quiz() {
     setQuizData(data);
   };
 
+  const handleClickAnswer = (answer: string, idx: number) => {
+    const correctAnswer = quizData[stage].correct_answer;
+    Object.assign(quizData[stage], { userAnswer: answer });
+
+    if (answer === correctAnswer) {
+      setCorrectNumber((props) => props + 1);
+      setIsCorrect(true);
+    }
+
+    setSelectIdx(idx);
+    setSelected(true);
+  };
+
+  const handleClickNext = () => {
+    setStage(stage + 1);
+    setSelected(false);
+    setSelectIdx(4);
+    setIsCorrect(false);
+  };
+
+  const handleResult = () => {
+    setStage(0);
+    setSelected(false);
+    setSelectIdx(4);
+    setIsCorrect(false);
+    setCorrectNumber(0)
+
+    navigate("/result", {
+      state: quizData,
+    });
+  };
+
   useEffect(() => {
     handleQuizData();
   }, []);
 
   return (
-    <>
+    <Container>
       {quizData.length !== stage &&
-        <Container>
+        <>
           <Header>
             <h2 className="questionNumber">
               {`Question ${stage + 1}`}
             </h2>
             <div className="correctAnswer">
-              <p>✔ 0</p>
-              <p>✘ 0</p>
+              <p>✔ {correctNumber}</p>
+              <p>✘ {quizData.length - correctNumber}</p>
             </div>
           </Header>
           <Frame>
             <Question>
               <span>🔔</span>
               <span className="question">
-                {`${quizData[stage]?.question}`}
+                {quizData[stage]?.question}
               </span>
             </Question>
             <AnswerList>
-              {quizData[stage].incorrect_answers?.map((item: string) => (
-                <Button>{item}</Button>
+              {quizData[stage].incorrect_answers?.map((item: string, idx: number) => (
+                <AnswerButton
+                  key={idx}
+                  onClick={() => handleClickAnswer(item, idx)}
+                  selected={selectIdx === idx}
+                  disabled={selected}
+                  isCorrect={isCorrect}
+                >
+                  {item}
+                </AnswerButton>
               ))}
             </AnswerList>
           </Frame>
           <Footer>
             <Button
-              onClick={() => setStage(stage + 1)}
-              disabled={true}
+              onClick={() => quizData.length - 1 !== stage
+                ? handleClickNext()
+                : handleResult()
+              }
+              disabled={!selected}
             >
-              Next Question
+              {quizData.length - 1 !== stage ?  "Next Question" : "Finish"}
             </Button>
           </Footer>
-        </Container>
+        </>
       }
-    </>
+    </Container>
   );
 }
 
@@ -109,24 +159,36 @@ const AnswerList = styled.div`
   display: flex;
   justify-content: space-evenly;
   margin: 15rem 0 30px 0;
-
-  button {
-    position: relative;
-    overflow: hidden;
-
-    &::before {
-      content: '';
-      position:absolute;
-      top:0;
-      left:-100%;
-      width:100%;
-      height:100%;
-      background: rgba(255, 255, 255, 0.1);
-      transition:0.5s;
-      pointer-events: none;
-    }
-  }
 `;
+
+const AnswerButton = styled(Button)<answerProps>`
+  position: relative;
+  overflow: hidden;
+  background-color: ${(props) => (props.isCorrect && props.selected)
+    && props.theme.colors.blue};
+  background-color: ${(props) => (!props.isCorrect && props.selected)
+    && props.theme.colors.red};
+
+  &::before {
+    content: '';
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background: rgba(255, 255, 255, 0.1);
+    transition:0.5s;
+    pointer-events: none;
+  }
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.darkgray};
+    background-color: ${(props) => (!props.isCorrect && props.selected)
+    && props.theme.colors.red};
+    background-color: ${(props) => (props.isCorrect && props.selected)
+    && props.theme.colors.blue};
+  }
+`
 
 const Footer = styled.div`
   display: flex;
