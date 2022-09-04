@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -9,11 +9,34 @@ import NoteModal from "./NoteModal";
 
 function Note() {
   const navigate = useNavigate();
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [incorrectData, setIncorrectData] = useState<Array<any>>([]);
+  const [selectData, setSelectData] = useState<object>({});
+  const [date, setDate] = useState<string>("");
+
+  const handleOpenModal = (data: object) => {
+    setOpenModal(true);
+    setSelectData(data);
+  };
 
   const handleModal = (result: boolean) => {
     setOpenModal(result);
   };
+
+  useEffect(() => {
+    const data: any = localStorage.getItem("note");
+    const { quizData, timeStamp } = JSON.parse(data);
+
+    const newDate = new Date(timeStamp).toLocaleDateString();
+    const parseDate = newDate.replaceAll(". ", "-").replace(".", "");
+    setDate(parseDate);
+
+    quizData.forEach((item: any) => {
+      if (item.correct_answer !== item.userAnswer) {
+        setIncorrectData((data) => data.concat(item));
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -28,13 +51,15 @@ function Note() {
           <div className="line" />
         </Header>
         <Content>
-          <Button onClick={() => setOpenModal(true)}>
-            <span>2022-09-01</span>
-            <h2>Daniel Radcliffe became a global star in the film industry due to his performance in which film franchise?</h2>
-          </Button>
+          {incorrectData.map((item: any) => (
+            <Button onClick={() => handleOpenModal(item)}>
+              <span>{date}</span>
+              <h2>{item.question}</h2>
+            </Button>
+          ))}
         </Content>
       </NoteContainer>
-      {openModal && <NoteModal handleModal={handleModal} />}
+      {openModal && <NoteModal handleModal={handleModal} selectData={selectData} />}
     </>
   );
 }

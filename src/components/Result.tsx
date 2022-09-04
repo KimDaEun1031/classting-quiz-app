@@ -15,20 +15,20 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 function Result() {
   const { state }: any = useLocation();
   const navigate = useNavigate();
-  const { correctNumber, quizData, time } = state;
+  const { incorrect, correct, time } = state;
 
   const data = {
     labels: ["정답", "오답"],
     datasets: [
       {
         label: "# of Quiz",
-        data: [correctNumber, quizData.length - correctNumber],
+        data: [correct, incorrect],
         backgroundColor: ["rgb(0, 168, 199)", "rgb(221, 89, 89)"],
         borderColor: ["rgb(0, 168, 199)", "rgb(221, 89, 89)"],
         borderWidth: 1,
       },
     ],
-  }
+  };
 
   return (
     <ResultContainer>

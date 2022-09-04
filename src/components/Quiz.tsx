@@ -47,10 +47,14 @@ function Quiz() {
   };
 
   const handleResult = () => {
+    const timeStamp = new Date().getTime();
+
+    localStorage.setItem("note", JSON.stringify({ quizData, timeStamp }));
+
     navigate("/result", {
       state: {
-        quizData,
-        correctNumber,
+        incorrect: quizData.length - correctNumber,
+        correct: correctNumber,
         time,
       },
     });
@@ -59,8 +63,8 @@ function Quiz() {
     setSelected(false);
     setSelectIdx(4);
     setIsCorrect(false);
-    setCorrectNumber(0)
-    setTime(0)
+    setCorrectNumber(0);
+    setTime(0);
   };
 
   useEffect(() => {
@@ -74,7 +78,7 @@ function Quiz() {
 
     return () => {
       clearInterval(timer);
-    }
+    };
   }, []);
 
   return (

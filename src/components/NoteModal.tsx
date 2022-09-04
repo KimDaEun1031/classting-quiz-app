@@ -4,20 +4,25 @@ import Container from "./shared/Container";
 import Button from "./shared/Button";
 import AnimationButton from "./shared/AnimationButton";
 import BackIcon from "../assets/images/back-icon.png";
+import { answerProps } from "./type";
 
-function NoteModal({ handleModal }: any) {
-  const exampleAnswerList = ["Pirates of the Caribbean", "Ted", "Spy Kids", "Harry Potter"];
-
+function NoteModal({ handleModal, selectData }: any) {
   return (
     <NoteModalContainer>
       <ModalContainer>
         <p className="question">
-          Q1. Daniel Radcliffe became a global star in the film industry due to his performance in which film franchise?
+          Q1. {selectData.question}
         </p>
         <Content>
           <div className="answerList">
-            {exampleAnswerList.map((item) => (
-              <Button disabled>{item}</Button>
+            {selectData.incorrect_answers.map((item: string) => (
+              <AnswerButton
+                isCorrect={selectData.correct_answer === item}
+                selected={selectData.userAnswer === item}
+                disabled
+              >
+                {item}
+              </AnswerButton>
             ))}
           </div>
           <AnimationButton onClick={() => handleModal(false)}>
@@ -64,19 +69,19 @@ const Content = styled.div`
   .answerList {
     display: flex;
     flex-direction: column;
-
-    button {
-      margin: 10px;
-
-      &:first-child {
-        background-color: ${(props) => props.theme.colors.green};
-      }
-
-      &:nth-child(3) {
-        background-color: ${(props) => props.theme.colors.red};
-      }
-    }
   }
 `;
+
+const AnswerButton = styled(Button)<answerProps>`
+  margin: 10px;
+  background-color: ${(props) => props.isCorrect && props.theme.colors.blue};
+  background-color: ${(props) => props.selected && props.theme.colors.red};
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.darkgray};
+    background-color: ${(props) => props.isCorrect && props.theme.colors.blue};
+    background-color: ${(props) => props.selected && props.theme.colors.red};
+  }
+`
 
 export default NoteModal;
