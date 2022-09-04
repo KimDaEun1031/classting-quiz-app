@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import Main from "./components/Main";
 import Note from "./components/Note";
-import Quiz from './components/Quiz';
+import Quiz from "./components/Quiz";
 import Result from "./components/Result";
 
 function App() {

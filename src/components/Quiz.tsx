@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import Button from "./shared/Button";
 import Container from "./shared/Container";
 import Frame from "./shared/Frame";
-import getQuizAPI from '../api/index';
+import getQuizAPI from "../api/index";
 import scrubData from "../utils/scrubData";
-import { answerProps } from './type';
+import { answerProps } from "./type";
 
 function Quiz() {
   const navigate = useNavigate();
@@ -191,7 +191,7 @@ const AnswerButton = styled(Button)<answerProps>`
     && props.theme.colors.red};
 
   &::before {
-    content: '';
+    content: "";
     position:absolute;
     top:0;
     left:-100%;

@@ -1,5 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { Doughnut } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 import Container from "./shared/Container";
 import Frame from "./shared/Frame";
@@ -8,17 +10,37 @@ import HomeIcon from "../assets/images/home-icon.png";
 import RedoIcon from "../assets/images/redo-icon.png";
 import NoteIcon from "../assets/images/note-icon.png";
 
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 function Result() {
+  const { state }: any = useLocation();
   const navigate = useNavigate();
+  const { correctNumber, quizData, time } = state;
+  console.log(correctNumber, quizData, time);
+
+  const data = {
+    labels: ["정답", "오답"],
+    datasets: [
+      {
+        label: "# of Quiz",
+        data: [correctNumber, quizData.length - correctNumber],
+        backgroundColor: ["rgb(0, 168, 199)", "rgb(221, 89, 89)"],
+        borderColor: ["rgb(0, 168, 199)", "rgb(221, 89, 89)"],
+        borderWidth: 1,
+      },
+    ],
+  }
 
   return (
     <ResultContainer>
       <ResultFrame>
         <div>
           <h2>결과</h2>
-          <span>0분 0초</span>
+          <span>{time}초</span>
         </div>
-        <Chart></Chart>
+        <Chart>
+          <Doughnut data={data} />
+        </Chart>
       </ResultFrame>
       <ButtonContainer>
         <AnimationButton onClick={() => navigate("/")}>
@@ -46,7 +68,7 @@ const ResultContainer = styled(Container)`
 `;
 
 const ResultFrame = styled(Frame)`
-  width: 50%;
+  width: 800px;
   height: 80%;
 
   div {
@@ -63,7 +85,11 @@ const ResultFrame = styled(Frame)`
   }
 `;
 
-const Chart = styled.div``;
+const Chart = styled.div`
+  width: 500px;
+  height: 500px;
+  margin: 0 9rem;
+`;
 
 const ButtonContainer = styled.div`
   position: absolute;

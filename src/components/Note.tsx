@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 import Container from "./shared/Container";
-import Button from './shared/Button';
+import Button from "./shared/Button";
 import HomeIcon from "../assets/images/home-icon.png";
-import NoteModal from './NoteModal';
+import NoteModal from "./NoteModal";
 
 function Note() {
   const navigate = useNavigate();
