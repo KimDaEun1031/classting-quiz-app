@@ -1,40 +1,64 @@
+import { useEffect, useState } from 'react';
 import styled from "styled-components";
 
 import Button from "./shared/Button";
 import Container from "./shared/Container";
 import Frame from "./shared/Frame";
+import getQuizAPI from '../api/index';
+import scrubData from "../utils/scrubData";
 
 function Quiz() {
-  const exampleAnswerList = ["Pirates of the Caribbean", "Ted", "Spy Kids", "Harry Potter"];
+  const [stage, setStage] = useState<number>(0);
+  const [quizData, setQuizData] = useState<any | null>([]);
+
+  const handleQuizData = async () => {
+    const res = await getQuizAPI();
+    const data = scrubData(res.data.results);
+
+    setQuizData(data);
+  };
+
+  useEffect(() => {
+    handleQuizData();
+  }, []);
 
   return (
-    <Container>
-      <Header>
-        <h2 className="questionNumber">
-          Question 1
-        </h2>
-        <div className="correctAnswer">
-          <p>✔ 0</p>
-          <p>✘ 0</p>
-        </div>
-      </Header>
-      <Frame>
-        <Question>
-          <span>🔔</span>
-          <span className="question">
-            Daniel Radcliffe became a global star in the film industry due to his performance in which film franchise?
-          </span>
-        </Question>
-        <AnswerList>
-          {exampleAnswerList.map((item) => (
-            <Button>{item}</Button>
-          ))}
-        </AnswerList>
-      </Frame>
-      <Footer>
-        <Button>Next Question</Button>
-      </Footer>
-    </Container>
+    <>
+      {quizData.length !== stage &&
+        <Container>
+          <Header>
+            <h2 className="questionNumber">
+              {`Question ${stage + 1}`}
+            </h2>
+            <div className="correctAnswer">
+              <p>✔ 0</p>
+              <p>✘ 0</p>
+            </div>
+          </Header>
+          <Frame>
+            <Question>
+              <span>🔔</span>
+              <span className="question">
+                {`${quizData[stage]?.question}`}
+              </span>
+            </Question>
+            <AnswerList>
+              {quizData[stage].incorrect_answers?.map((item: string) => (
+                <Button>{item}</Button>
+              ))}
+            </AnswerList>
+          </Frame>
+          <Footer>
+            <Button
+              onClick={() => setStage(stage + 1)}
+              disabled={true}
+            >
+              Next Question
+            </Button>
+          </Footer>
+        </Container>
+      }
+    </>
   );
 }
 
@@ -114,6 +138,14 @@ const Footer = styled.div`
 
     &:hover {
       transform: translate(40px);
+    }
+
+    &:disabled {
+      background: ${(props) => props.theme.colors.darkgray};
+
+      &:hover {
+        transform: translate(0);
+      }
     }
   }
 `;
