@@ -33,6 +33,8 @@ const AnimationButton = styled(Button)`
   }
 
   &:hover {
+    background-color: ${(props) => props.theme.colors.green};
+
     span {
       left: 5px;
       transition: left 0.4s;
