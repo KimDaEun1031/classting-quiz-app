@@ -57,7 +57,7 @@ function Note() {
             {incorrectData.map((item: any) => (
               <Button onClick={() => handleOpenModal(item)}>
                 <span>{date}</span>
-                <h2>{item.question}</h2>
+                <h2 dangerouslySetInnerHTML={{ __html: `${item?.question}` }} />
               </Button>
             ))}
           </Content>

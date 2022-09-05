@@ -10,9 +10,10 @@ function NoteModal({ handleModal, selectData }: any) {
   return (
     <NoteModalContainer>
       <ModalContainer>
-        <p className="question">
-          Q1. {selectData.question}
-        </p>
+        <p
+          className="question"
+          dangerouslySetInnerHTML={{ __html: `Q: ${selectData?.question}` }}
+        />
         <Content>
           <div className="answerList">
             {selectData.incorrect_answers.map((item: string) => (
