@@ -78,7 +78,6 @@ const AnswerButton = styled(Button)<answerProps>`
   background-color: ${(props) => props.selected && props.theme.colors.red};
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.darkgray};
     background-color: ${(props) => props.isCorrect && props.theme.colors.blue};
     background-color: ${(props) => props.selected && props.theme.colors.red};
   }

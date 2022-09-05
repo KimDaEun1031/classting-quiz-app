@@ -13,7 +13,7 @@ const Button = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.green};
+    background-color: ${(props) => props.theme.colors.darkgray};
 
     &::before {
       left: -50%;

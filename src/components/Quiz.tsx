@@ -141,7 +141,7 @@ const Header = styled.div`
   text-align: center;
 
   p, h2 {
-    width: 130px;
+    width: 150px;
     margin: 10px;
     color: white;
     font-size: 20px;
@@ -207,7 +207,6 @@ const AnswerButton = styled(Button)<answerProps>`
   }
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.darkgray};
     background-color: ${(props) => (!props.isCorrect && props.selected)
     && props.theme.colors.red};
     background-color: ${(props) => (props.isCorrect && props.selected)
