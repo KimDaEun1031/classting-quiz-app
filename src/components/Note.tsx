@@ -24,18 +24,20 @@ function Note() {
   };
 
   useEffect(() => {
-    const data: any = localStorage.getItem("note");
-    const { quizData, timeStamp } = JSON.parse(data);
+    if (localStorage.getItem("note")) {
+      const data: any = localStorage.getItem("note");
+      const { quizData, timeStamp } = JSON.parse(data);
 
-    const newDate = new Date(timeStamp).toLocaleDateString();
-    const parseDate = newDate.replaceAll(". ", "-").replace(".", "");
-    setDate(parseDate);
+      const newDate = new Date(timeStamp).toLocaleDateString();
+      const parseDate = newDate.replaceAll(". ", "-").replace(".", "");
+      setDate(parseDate);
 
-    quizData.forEach((item: any) => {
-      if (item.correct_answer !== item.userAnswer) {
-        setIncorrectData((data) => data.concat(item));
-      }
-    });
+      quizData.forEach((item: any) => {
+        if (item.correct_answer !== item.userAnswer) {
+          setIncorrectData((data) => data.concat(item));
+        }
+      });
+    }
   }, []);
 
   return (
@@ -50,14 +52,17 @@ function Note() {
           </div>
           <div className="line" />
         </Header>
-        <Content>
-          {incorrectData.map((item: any) => (
-            <Button onClick={() => handleOpenModal(item)}>
-              <span>{date}</span>
-              <h2>{item.question}</h2>
-            </Button>
-          ))}
-        </Content>
+        {incorrectData.length !== 0
+          ? <Content>
+            {incorrectData.map((item: any) => (
+              <Button onClick={() => handleOpenModal(item)}>
+                <span>{date}</span>
+                <h2>{item.question}</h2>
+              </Button>
+            ))}
+          </Content>
+          : <p className="message">퀴즈를 풀면 틀린 문제 리스트를 볼 수 있습니다.</p>
+        }
       </NoteContainer>
       {openModal && <NoteModal handleModal={handleModal} selectData={selectData} />}
     </>
@@ -68,6 +73,12 @@ const NoteContainer = styled(Container)`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  .message {
+    margin: 50px;
+    font-size: 30px;
+    color: white;
+  }
 `;
 
 const Header = styled.div`
