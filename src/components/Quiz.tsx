@@ -98,9 +98,10 @@ function Quiz() {
           <Frame>
             <Question>
               <span>🔔</span>
-              <span className="question">
-                {quizData[stage]?.question}
-              </span>
+              <span
+                className="question"
+                dangerouslySetInnerHTML={{ __html: `${quizData[stage]?.question}` }}
+              />
             </Question>
             <AnswerList>
               {quizData[stage].incorrect_answers?.map((item: string, idx: number) => (
